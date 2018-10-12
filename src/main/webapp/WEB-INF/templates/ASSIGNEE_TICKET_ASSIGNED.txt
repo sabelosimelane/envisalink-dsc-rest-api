@@ -1,0 +1,11 @@
+Hi {assignee},
+
+A ticket has been assigned to you from Monterrey Body Corporate Portal.
+
+{comment}
+
+You can login to see more details at https://monterrey.pollux.co.za
+
+Regards,
+
+{commentor}

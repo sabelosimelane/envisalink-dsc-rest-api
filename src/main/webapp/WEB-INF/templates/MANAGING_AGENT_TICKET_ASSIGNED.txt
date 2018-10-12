@@ -1,0 +1,11 @@
+Hi {assignee},
+
+{comment}
+
+Please respond to this email address so that we can track the ticket.
+
+----------- ORIGINAL TICKET--------------
+Unit No.: {ticket.unit}
+Reporter: {reporter}
+
+{ticket.body}

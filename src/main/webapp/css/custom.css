@@ -1,0 +1,118 @@
+.clickable {
+	cursor: pointer;
+}
+
+#toast-container > div.toast {
+    background-image: none !important;
+}
+
+#navigation {
+	
+}
+
+.navigation {
+	cursor: pointer;
+}
+
+.navigation.selected {
+	background-color: #002333;
+}
+
+.navigation:hover {
+	background-color: #002333;
+}
+
+.snippet-list {
+	width: 109%;
+
+}
+
+.snippet-list::-webkit-scrollbar {
+    width: 3px;
+    height: 2em;
+    max-height: 1px;
+}
+
+.snippet-list::-webkit-scrollbar-thumb {
+    background: #aaa;
+}
+
+.snippet-list-nav {
+	padding-right: 3%;
+}
+
+.snippet-content {
+	
+}
+
+.snippet-label {
+	
+}
+
+.snippet-label::-webkit-scrollbar {
+    width: 3px;
+    height: 2em;
+    max-height: 1px;
+}
+
+.snippet-label::-webkit-scrollbar-thumb {
+    background: #aaa;
+}
+
+
+.snippet-content::-webkit-scrollbar {
+    width: 6px;
+    height: 2em;
+    max-height: 1px;
+}
+
+.snippet-content::-webkit-scrollbar-thumb {
+    background: #aaa;
+}
+
+.snippet-navigation {
+	cursor: pointer;
+}
+
+.snippet-navigation:hover {
+	background-color: #e4e4e4;
+}
+
+.snippet-navigation.selected {
+	background-color: #e4e4e4;
+}
+
+.code-label-btn {
+	background-color: #c2c2c2; color: #ffffff; border-radius: 4px;
+}
+
+.code-label {
+	border-right: 1px solid #676a6c; display: inline-block; padding: 4px 5px 4px 5px;
+}
+
+.navigation.list-group-item .numOfSnippets:hover {
+	background-color: #c2c2c2 !important;
+}
+
+.unread div {
+  font-weight: 600;
+  color: inherit;
+}
+
+.read div a,
+.read div {
+  font-weight: normal;
+  color: inherit;
+}
+.unread div {
+  background-color: #f9f8f8;
+  padding: 2px 3px 2px 0px;
+}
+
+div.unreadmessage {
+	background-color: #f9f8f8;
+  	padding: 6px;
+  	font-weight: 600;
+  color: inherit;
+}
+
