@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd" version="3.1">
+  <display-name>Pollux</display-name>
+  
+  <!-- REST EASY -->
+	<context-param>
+      <param-name>resteasy.servlet.mapping.prefix</param-name>
+      <param-value>/rest</param-value>
+   </context-param>
+	<listener>
+		<listener-class>
+			org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
+		</listener-class>
+	</listener>
+	<servlet>
+		<servlet-name>RESTEasy</servlet-name>
+		<servlet-class>
+			org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
+		</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RESTEasy</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+	<context-param>
+		<param-name>resteasy.resources</param-name>
+		<param-value>za.co.juba.integration.services.ControllerService</param-value>
+	</context-param>
+	<!-- REST EASY END -->
+  
+  <context-param>
+    <description>Used to infer where the main package of the app is</description>
+    <param-name>main.package</param-name>
+    <param-value>io.snippetmanager</param-value>
+  </context-param>
+  <context-param>
+    <description>Used to infer where the web navigator package of the app is. All request with navparam postfixed with .nav</description>
+    <param-name>main.navigator.package</param-name>
+    <param-value>za.co.juba.navigator</param-value>
+  </context-param>
+  <context-param>
+    <description>Used to infer where the web navigator package of the app is. All request with navparam postfixed with .mobi</description>
+    <param-name>mobile.navigator.package</param-name>
+    <param-value>za.co.juba.mobile.navigator</param-value>
+  </context-param>
+  <context-param>
+    <param-name>bpm.datasource</param-name>
+    <param-value>jdbc/slave</param-value>
+  </context-param>
+  <context-param>
+    <description>Do you want to enable authentication for all requests with the postfix .mobi?? e.g. login.mobi</description>
+    <param-name>basic.auth.for.mobi.enabled</param-name>
+    <param-value>false</param-value>
+  </context-param>
+  <context-param>
+    <description>Only applicable if [basic.auth.for.mobi.enabled=true] and [authenticator.class] has not been set</description>
+    <param-name>basic.auth.username</param-name>
+    <param-value>sabside</param-value>
+  </context-param>
+  <context-param>
+    <description>Only applicable if [basic.auth.for.mobi.enabled=true] and [authenticator.class] has not been set</description>
+    <param-name>basic.auth.password</param-name>
+    <param-value>bfe6d93dcbd7db07e7f3f76d30252351</param-value>
+  </context-param>
+  <context-param>
+    <description>The class to use to authenticate users. MUST IMPLEMENT THE INTERFACE: Authenticator!!</description>
+    <param-name>authenticator.class</param-name>
+    <param-value>com.lilanda.automation.authentication.PropertiesAuthenticator</param-value>
+  </context-param>
+  <context-param>
+    <param-name>datasource</param-name>
+    <param-value>jdbc/jubacontroller</param-value>
+  </context-param>
+  <context-param>
+    <description>Framework has inbuilt file system persistence. Just specify a file in the web folder. Uses serialization into a HashMap</description>
+    <param-name>filesystem.persistence.file</param-name>
+    <param-value>/WEB-INF/datafiles/conceptDB.db</param-value>
+  </context-param>
+  <context-param>
+    <param-name>upload.tempfile.dir</param-name>
+    <param-value>C:/temp/uploadtemp</param-value>
+  </context-param>
+  
+</web-app>
