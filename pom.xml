@@ -47,17 +47,17 @@
 		<dependency>
 			<groupId>concept-mvc</groupId>
 			<artifactId>concept-mvc</artifactId>
-			<version>3.0.10</version>
+			<version>4.2.2</version>
 		</dependency> 
 		<dependency>
 			<groupId>DBTools</groupId>
 			<artifactId>DBTools</artifactId>
-			<version>2.1.1</version>
+			<version>3.0.1</version>
 		</dependency>
 		<dependency>
 			<groupId>concept-utils</groupId>
 			<artifactId>concept-utils</artifactId>
-			<version>1.1.4</version>
+			<version>1.1.9</version>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>
@@ -162,7 +162,7 @@
 	<dependency>
 		<groupId>DBTestingTools</groupId>
 		<artifactId>DBTestingTools</artifactId>
-		<version>1.1.1</version>
+		<version>2.0.0</version>
 		<scope>test</scope>
 	</dependency>
 	
