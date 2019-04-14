@@ -1,39 +1,35 @@
-package za.co.juba;
+package za.co.juba.navigator;
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileInputStream;			
 import java.nio.file.Paths;
 import java.util.Properties;
 
 import javax.inject.Inject;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
+import org.jboss.weld.junit5.auto.EnableAutoWeld;
+import org.junit.Assert;
+import org.junit.Test;
 
 import com.concept.dbtools.DBAccessor;
 import com.concept.dbtools.jdbc.JdbcStringHostCtxConfig;
+import com.concept.mvc.navigation.NavigatorException;
 import com.concept.mvc.navigation.controller.Controller;
 
+import za.co.juba.DirectoryUtil;
 import za.co.juba.liquibase.LiquibaseExecutor;
+import za.co.juba.view.user.LoginViewBean;
 
-/**
- * 
- * @author Sabelo Simelane <sabside@gmail.com>
- *
- */
-@RunWith(Suite.class)
-@SuiteClasses({	})
-public class AllTests {
-	
-	public static String PROJECT_ROOT = DirectoryUtil.currentDir();
+@EnableAutoWeld
+public class LoginNavigatorTest {
+
+	private @Inject LoginNavigator navigator;
 	private @Inject DBAccessor dbAccessor;
 	private @Inject LiquibaseExecutor liquibase;
 	
-	@Before
-	public void setup() {
+	
+	@Test
+	public void test() {
 		try {
 			
 			Properties props = new Properties();
@@ -54,16 +50,16 @@ public class AllTests {
 
 			e.printStackTrace();
 		}
-	}
-	
-	@AfterClass
-	public void cleanup() {
-		/*System.out.println("AFTER THE FACT!!!");
+
+		LoginViewBean loginViewBean = new LoginViewBean();
+		loginViewBean.setEmail("sabside@gmail.com");
+		loginViewBean.setPassword("Musn12nat");
 		try {
-			Connection conn = dbAccessor.connect();
-			dbAccessor.runUpdate(conn, "SELECT 'drop table if exists ' || tablename || ' cascade;' as pg_drop FROM pg_tables");
-		} catch (SQLException e) {
+			navigator.execute(loginViewBean);
+		} catch (NavigatorException e) {
 			e.printStackTrace();
-		}*/
+			Assert.fail();
+		}
 	}
+
 }

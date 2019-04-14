@@ -41,7 +41,7 @@
 	<jsp:include page="includes/javascript-lib.jsp"></jsp:include>
 	
 	<script>
-	var app = new App({root: '/Pollux/', context: '/Pollux/Controller'});
+	var app = new App({root: '/Template/', context: '/Template/Controller'});
 	app.init();
 	var message = new Message({timeOut: 3500, positionClass:'toast-top-right'});
 	var nav = new Navigator();
@@ -56,7 +56,7 @@
 					password : $('#password').val()
 					}, function(resp) {
 					console.log(resp);
-					window.location = '/Pollux/main.jsp';
+					window.location = app.root + 'main.jsp';
 				});  
 				
 				return false;

@@ -85,7 +85,7 @@
 	<script type="text/javascript" src="includes/navigation.js"></script>
 
  <script>
-	var app = new App({root: '/Pollux/', context: '/Pollux/Controller'});
+	var app = new App({root: '/Template/', context: '/Template/Controller'});
 	app.init();
 	var message = new Message({timeOut: 3500, positionClass:'toast-top-right'});
 	var nav = new Navigator();

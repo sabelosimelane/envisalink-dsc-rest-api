@@ -24,20 +24,27 @@ import liquibase.resource.FileSystemResourceAccessor;
 public class LiquibaseExecutor {
 
 	private @Inject DBAccessor dbAccessor;
-
+	private String path;
+	
 	public void execute() throws Exception {
 		Connection con = dbAccessor.connect();
 		JdbcConnection jdbcCon = new JdbcConnection(con);
 
 		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcCon);
+		path = (path == null? Controller.serverPath + "WEB-INF/dbchanges/": path); 
+		
 		Liquibase liquibase = new Liquibase("db.changelog.xml",
 				new CompositeResourceAccessor(
 						new ClassLoaderResourceAccessor(), 
-						new FileSystemResourceAccessor(Controller.serverPath + "WEB-INF/dbchanges/"), 
+						new FileSystemResourceAccessor(path), 
 						new ClassLoaderResourceAccessor(Thread.currentThread().getContextClassLoader())),
 				database);
 
 		liquibase.update("public");
 
+	}
+	
+	public void init(String path) {
+		this.path = path;
 	}
 }
