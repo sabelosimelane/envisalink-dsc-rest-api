@@ -68,8 +68,10 @@
     <param-value>com.lilanda.automation.authentication.PropertiesAuthenticator</param-value>
   </context-param>
   <context-param>
-    <param-name>datasource</param-name>
-    <param-value>jdbc/jubacontroller</param-value>
+    <description>if using datasource put datasource name e.g jdbc/pollux. If using jdbc string put this "host=localhost,port=5432,username=postgres,password=mypassword,ssl=true,schema=public"</description>
+    <param-name>connection.details</param-name>
+    <param-value>jdbc/snippet</param-value>
+    <!-- <param-value>host=localhost,port=5432,username=postgres,password=Musn12nat,database=pollux,ssl=false,schema=public</param-value> -->
   </context-param>
   <context-param>
     <description>Framework has inbuilt file system persistence. Just specify a file in the web folder. Uses serialization into a HashMap</description>
