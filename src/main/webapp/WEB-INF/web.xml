@@ -12,7 +12,7 @@
 			org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
 		</listener-class>
 	</listener>
-	<servlet>
+	<!-- <servlet>
 		<servlet-name>RESTEasy</servlet-name>
 		<servlet-class>
 			org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
@@ -25,7 +25,7 @@
 	<context-param>
 		<param-name>resteasy.resources</param-name>
 		<param-value>za.co.juba.integration.services.ControllerService</param-value>
-	</context-param>
+	</context-param> -->
 	<!-- REST EASY END -->
   
   <context-param>

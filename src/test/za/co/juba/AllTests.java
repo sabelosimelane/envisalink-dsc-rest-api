@@ -17,17 +17,13 @@ import com.concept.dbtools.DBAccessor;
 import com.concept.dbtools.jdbc.JdbcStringHostCtxConfig;
 import com.concept.mvc.navigation.controller.Controller;
 
-import za.co.juba.view.user.CreateUserTest;
-
 /**
  * 
  * @author Sabelo Simelane <sabside@gmail.com>
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({
-	CreateUserTest.class
-	})
+@SuiteClasses({	})
 public class AllTests {
 	
 	public static String PROJECT_ROOT = DirectoryUtil.currentDir();
