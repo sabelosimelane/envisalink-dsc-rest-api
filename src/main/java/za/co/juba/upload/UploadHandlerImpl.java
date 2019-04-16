@@ -13,8 +13,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.concept.mvc.fileupload.UploadHandler;
+
 import za.co.juba.properties.PropertiesManager;
-import za.co.juba.temp.UploadHandler;
 
 /**
  * @author f3557790

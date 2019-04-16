@@ -2,14 +2,13 @@ package za.co.juba.navigator;
 
 import javax.inject.Inject;
 
+import com.concept.mvc.fileupload.UploadFiles;
 import com.concept.mvc.navigation.NavigatorException;
 import com.concept.mvc.navigation.NavigatorUtil;
 import com.concept.mvc.navigation.controller.Navigate;
 import com.concept.mvc.navigation.controller.Navigator;
 import com.concept.mvc.navigation.controller.ReturnType;
 import com.concept.mvc.viewbean.ViewBean;
-
-import za.co.juba.temp.UploadFiles;
 
 /**
  * 

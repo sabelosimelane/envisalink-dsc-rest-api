@@ -47,12 +47,12 @@
 		<dependency>
 			<groupId>concept-mvc</groupId>
 			<artifactId>concept-mvc</artifactId>
-			<version>4.3.1</version>
+			<version>4.3.2</version>
 		</dependency> 
 		<dependency>
 			<groupId>DBTools</groupId>
 			<artifactId>DBTools</artifactId>
-			<version>3.0.4-testing</version>
+			<version>3.0.4</version>
 		</dependency>
 		<dependency>
 			<groupId>concept-utils</groupId>
