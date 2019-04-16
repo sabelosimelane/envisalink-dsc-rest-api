@@ -33,7 +33,7 @@ public class LiquibaseExecutor {
 		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(jdbcCon);
 		path = (path == null? Controller.serverPath + "WEB-INF/dbchanges/": path); 
 		
-		Liquibase liquibase = new Liquibase("db.changelog.xml",
+		Liquibase liquibase = new Liquibase(path+"db.changelog.xml",
 				new CompositeResourceAccessor(
 						new ClassLoaderResourceAccessor(), 
 						new FileSystemResourceAccessor(path), 

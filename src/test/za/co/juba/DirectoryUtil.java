@@ -16,8 +16,8 @@ public class DirectoryUtil {
 	    String path = currDir.getAbsolutePath();
 	    //path.replaceAll("\\", "/");
 	    
-	    path.replace("\\.", "");
-	    System.out.println(path);
+	    path = path.substring(0, path.length()-2);
+	    System.out.println("path:"+path);
 	    
 	    return path;
 	}
