@@ -1,191 +1,291 @@
 package automata.envisalink.rest;
 
-import java.text.ParseException;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Optional;
+
+import javax.ws.rs.core.MediaType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.json.JSONObject;
 
 import com.concept.utils.DateTimeUtil;
 import com.concept.utils.URLUtil;
 import com.github.kmbulebu.dsc.it100.ConfigurationBuilder;
 import com.github.kmbulebu.dsc.it100.IT100;
+import com.github.kmbulebu.dsc.it100.commands.read.BasePartitionCommand;
+import com.github.kmbulebu.dsc.it100.commands.read.BaseZoneCommand;
 import com.github.kmbulebu.dsc.it100.commands.read.ReadCommand;
-import com.github.kmbulebu.dsc.it100.commands.read.ZoneAlarmCommand;
-import com.github.kmbulebu.dsc.it100.commands.read.ZoneAlarmRestoreCommand;
-import com.github.kmbulebu.dsc.it100.commands.read.ZoneOpenCommand;
-import com.github.kmbulebu.dsc.it100.commands.read.ZoneRestoredCommand;
 
-import automata.envisalink.navigator.CallBack;
-import automata.envisalink.rest.domain.EventType;
+import automata.envisalink.navigator.domain.AlarmActivity;
+import automata.envisalink.navigator.domain.PartitionActivity;
+import automata.envisalink.navigator.domain.ZoneActivity;
 import rx.Observable;
 import rx.functions.Action1;
 
 public class DSCSession {
-	private final static Log log = LogFactory.getLog(DSCSession.class); 
+	private final static Log log = LogFactory.getLog(DSCSession.class);
 	private final String POST = "POST";
-	
+
 	private static DSCSession session;
-	private CallBack callback;
-		
+	private String callbackURI;
+
 	private IT100 instance;
 	private Observable<ReadCommand> readObservable;
+	private HashMap<String, String> headers = new HashMap<String, String>();
 	
-	private DSCSession() {}
-	
+	private DSCSession() {
+		headers.put("Content-Type", MediaType.APPLICATION_JSON);
+	}
+
 	public static DSCSession getInstance() {
 		if (session == null) {
 			session = new DSCSession();
 		}
-		
+
 		return session;
 	}
-	
-	public void setCallBackURI(CallBack callback) {
-		log.info("callback: "+callback.getUrl());
-		this.callback = callback;
+
+	public void setCallBackURI(String callbackURI) {
+		log.info("callbackURI: " + callbackURI);
+		this.callbackURI = callbackURI;
 	}
-	
+
 	public void connect(String ipAddress) throws Exception {
 		log.info(String.format("connecting to [%s]...", ipAddress));
-		final IT100 it100 = new IT100(new ConfigurationBuilder()
-				.withRemoteSocket(ipAddress, 4025)
-				.withStatusPolling(15)
-				.withEnvisalinkPassword("user").build());
-		
+		final IT100 it100 = new IT100(new ConfigurationBuilder().withRemoteSocket(ipAddress, 4025).withStatusPolling(15).withEnvisalinkPassword("user").build());
+
 		it100.connect();
-		
+
 		log.info("successfully connected!");
 		instance = it100;
 		readObservable = it100.getReadObservable();
 	}
-	
-	public void subscribe(EventType eventType, String callbackURI) {
+
+	public void subscribeToAll() {
+
+		readObservable.subscribe(new Action1<ReadCommand>() {
+
+			@Override
+			public void call(ReadCommand command) {
+
+				try {
+
+					log.info("Read: " + DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + command.getCommandCode() + " " + command.toString());
+					
+					Optional<AlarmActivity> activity = buildPayload(command);
+					
+					if (activity.isPresent() && activity.get() instanceof ZoneActivity) {
+						URLUtil.post(callbackURI.concat("/zone"), activity.get(), headers);
+						
+					} else if (activity.isPresent() && activity.get() instanceof PartitionActivity) {
+						URLUtil.post(callbackURI.concat("/partition"), activity.get(), headers);
+						
+					} else {
+						String theCommand = Base64.getEncoder().encodeToString(new JSONObject(command).toString().getBytes());
+						System.out.println("command: " +theCommand );
+						URLUtil.post(callbackURI.concat("/other?command=").concat(theCommand), null, headers);
+					}
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+			}
+
+		});
+	}
+
+	private Optional<AlarmActivity> buildPayload(ReadCommand command) {
+		AlarmActivity activity = null;
+		ZoneActivity zone = null;
+		PartitionActivity partition = null;
 		
-		if (eventType.name().equals(EventType.ZONE_OPEN.name())) {
-			subscribeToZoneOpen();
+		log.info("command code: "+command.getCommandCode());
+		switch(command.getCommandCode()) {
+		
+			case "601":
+				zone = new ZoneActivity();
+				zone.setStatus("Zone Alarm");
+				zone.setZone(((BaseZoneCommand)command).getZone());
+				activity = zone; break;
 			
-		} else if (eventType.name().equals(EventType.ZONE_RESTORE.name())) {
-			subscribeToZoneRestore();
+			case "602": 
+				zone = new ZoneActivity();
+				zone.setZone(((BaseZoneCommand)command).getZone());
+				activity = zone;
+				zone.setStatus("Zone Alarm Restore");
+				break;
 			
-		} else if (eventType.name().equals(EventType.ZONE_ALARM.name())) {
-			subscribeToZoneAlarm();
+			case "603": 
+				zone = new ZoneActivity();
+				zone.setZone(((BaseZoneCommand)command).getZone());
+				activity = zone;
+				zone.setStatus("Zone Tamper");
+				break;
 			
-		} else if (eventType.name().equals(EventType.ZONE_ALARM_RESTORE.name())) {
-			subscribeToZoneAlarmRestore();
+			case "604": 
+				zone = new ZoneActivity();
+				zone.setZone(((BaseZoneCommand)command).getZone());
+				activity = zone;
+				zone.setStatus("Zone Tamper Restore");
+				break;
 			
-		} else if (eventType.name().equals(EventType.ALL.name())) {
-			subscribeToZoneOpen();
-			subscribeToZoneRestore();
-			subscribeToZoneAlarm();
-			subscribeToZoneAlarmRestore();
+			case "605": 
+				zone = new ZoneActivity();
+				zone.setZone(((BaseZoneCommand)command).getZone());
+				activity = zone;
+				zone.setStatus("Zone Fault");
+				break;
+			
+			case "606": 
+				zone = new ZoneActivity();
+				zone.setZone(((BaseZoneCommand)command).getZone());
+				activity = zone;
+				zone.setStatus("Zone Fault Restore");
+				break;
+			
+			case "609": 
+				zone = new ZoneActivity();
+				zone.setZone(((BaseZoneCommand)command).getZone());
+				activity = zone;
+				zone.setStatus("Zone Open");
+				break;
+			
+			case "610": 
+				zone = new ZoneActivity();
+				zone.setZone(((BaseZoneCommand)command).getZone());
+				activity = zone;
+				zone.setStatus("Zone Restored");
+				break;
+			
+			case "650": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Partition Ready");
+				break;
+			
+			case "651": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Partition Not Ready");
+				break;
+			
+			case "652": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Partition Armed");
+				break;
+			
+			case "653": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Partition Ready - Force Arming Enabled");
+				break;
+			
+			case "654": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Partition In Alarm");
+				break;
+			
+			case "655": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Partition Disarmed");
+				break;
+			
+			case "656": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Exit Delay in Progress");
+				break;
+			
+			case "657": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Entry Delay in Progress");
+				break;
+			
+			case "658": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Keypad Lock-out");
+				break;
+			
+			case "659": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Partition Failed to Arm");
+				break;
+			
+			case "670": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Invalid Access Code");
+				break;
+			
+			case "672": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Failure to Arm");
+				break;
+			
+			case "700": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("User Closing");
+				break;
+			
+			case "701": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Special Closing");
+				break;
+			
+			case "702": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Partial Closing");
+				break;
+			
+			case "750": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("User Opening");
+				break;
+			
+			case "751": 
+				partition = new PartitionActivity();
+				partition.setPartition(((BasePartitionCommand)command).getPartition());
+				activity = partition;
+				partition.setStatus("Special Opening");
+				break;
+		
 		}
-	}
-	
-	private void subscribeToZoneAlarmRestore() {
-		readObservable.ofType(ZoneAlarmRestoreCommand.class).subscribe(new Action1<ZoneAlarmRestoreCommand>() {
 
-			@Override
-			public void call(ZoneAlarmRestoreCommand t1) {
-				try {
-					System.out.println("ZoneAlarm: "+DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + t1.getZone() +" - closed.");
-					
-					HashMap<String, String> headers = new HashMap<String, String>();
-					
-					if (callback.getMethod().equalsIgnoreCase(POST)) {
-						URLUtil.post(callback.getUrl(), null, headers);
-					} else {
-						URLUtil.get(callback.getUrl(), null, headers);
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			
-		});
-	}
-
-	private void subscribeToZoneAlarm() {
-		readObservable.ofType(ZoneAlarmCommand.class).subscribe(new Action1<ZoneAlarmCommand>() {
-
-			@Override
-			public void call(ZoneAlarmCommand t1) {
-				try {
-					System.out.println("ZoneAlarm: "+DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + t1.getZone() + " closed.");
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				
-				try {
-					HashMap<String, String> headers = new HashMap<String, String>();
-					
-					if (callback.getMethod().equalsIgnoreCase(POST)) {
-						URLUtil.post(callback.getUrl(), null, headers);
-					} else {
-						URLUtil.get(callback.getUrl(), null, headers);
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			
-		});
-	}
-	
-	private void subscribeToZoneRestore() {
-		readObservable.ofType(ZoneRestoredCommand.class).subscribe(new Action1<ZoneRestoredCommand>() {
-
-			@Override
-			public void call(ZoneRestoredCommand t1) {
-				try {
-					System.out.println("ZoneOpen: "+DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + t1.getZone() + " closed.");
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-				
-				try {
-					HashMap<String, String> headers = new HashMap<String, String>();
-					
-					if (callback.getMethod().equalsIgnoreCase(POST)) {
-						URLUtil.post(callback.getUrl(), null, headers);
-					} else {
-						URLUtil.get(callback.getUrl(), null, headers);
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-			
-		});
-	}
-	
-	private void subscribeToZoneOpen() {
-		readObservable.ofType(ZoneOpenCommand.class).subscribe(new Action1<ZoneOpenCommand>() {
-
-			@Override
-			public void call(ZoneOpenCommand t1) {
-				log.info("ZoneOpen: " + t1.getZone() + " opened.");
-				try {
-					HashMap<String, String> headers = new HashMap<String, String>();
-					
-					if (callback.getMethod().equalsIgnoreCase(POST)) {
-						URLUtil.post(callback.getUrl(), null, headers);
-					} else {
-						URLUtil.get(callback.getUrl(), null, headers);
-					}
-					
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				
-			}
-
-		});
+		if (activity != null) {
+			activity.setCommand(command.getCommandCode());
+		}
+		return Optional.ofNullable(activity);
 	}
 	
 	public void disconnect() throws Exception {

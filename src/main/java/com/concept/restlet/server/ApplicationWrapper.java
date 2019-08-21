@@ -11,6 +11,7 @@ import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
 import automata.envisalink.navigator.SubscribeNavigator;
+import automata.envisalink.rest.DSCSession;
 
 
 
@@ -53,6 +54,11 @@ public class ApplicationWrapper extends Application {
 
 			port = Integer.parseInt(serverProps.getProperty("server.port"));
 
+			//We connect to the Envisalink 4
+			DSCSession.getInstance().connect(serverProps.getProperty("envisalink.ip"));
+			DSCSession.getInstance().subscribeToAll();
+			DSCSession.getInstance().setCallBackURI(serverProps.getProperty("callback.uri"));
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

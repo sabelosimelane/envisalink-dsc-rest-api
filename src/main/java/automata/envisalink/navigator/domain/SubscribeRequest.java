@@ -1,4 +1,4 @@
-package automata.envisalink.navigator;
+package automata.envisalink.navigator.domain;
 
 public class SubscribeRequest {
 
