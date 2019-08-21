@@ -1,12 +1,15 @@
 package automata.envisalink.rest;
 
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.concept.utils.DateTimeUtil;
+import com.concept.utils.URLUtil;
 import com.github.kmbulebu.dsc.it100.ConfigurationBuilder;
 import com.github.kmbulebu.dsc.it100.IT100;
 import com.github.kmbulebu.dsc.it100.commands.read.ReadCommand;
@@ -15,15 +18,18 @@ import com.github.kmbulebu.dsc.it100.commands.read.ZoneAlarmRestoreCommand;
 import com.github.kmbulebu.dsc.it100.commands.read.ZoneOpenCommand;
 import com.github.kmbulebu.dsc.it100.commands.read.ZoneRestoredCommand;
 
+import automata.envisalink.navigator.CallBack;
 import automata.envisalink.rest.domain.EventType;
 import rx.Observable;
 import rx.functions.Action1;
 
 public class DSCSession {
 	private final static Log log = LogFactory.getLog(DSCSession.class); 
+	private final String POST = "POST";
 	
 	private static DSCSession session;
-	
+	private CallBack callback;
+		
 	private IT100 instance;
 	private Observable<ReadCommand> readObservable;
 	
@@ -35,6 +41,11 @@ public class DSCSession {
 		}
 		
 		return session;
+	}
+	
+	public void setCallBackURI(CallBack callback) {
+		log.info("callback: "+callback.getUrl());
+		this.callback = callback;
 	}
 	
 	public void connect(String ipAddress) throws Exception {
@@ -81,8 +92,15 @@ public class DSCSession {
 				try {
 					System.out.println("ZoneAlarm: "+DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + t1.getZone() +" - closed.");
 					
-				} catch (ParseException e) {
-					// TODO Auto-generated catch block
+					HashMap<String, String> headers = new HashMap<String, String>();
+					
+					if (callback.getMethod().equalsIgnoreCase(POST)) {
+						URLUtil.post(callback.getUrl(), null, headers);
+					} else {
+						URLUtil.get(callback.getUrl(), null, headers);
+					}
+					
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -98,7 +116,19 @@ public class DSCSession {
 				try {
 					System.out.println("ZoneAlarm: "+DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + t1.getZone() + " closed.");
 				} catch (ParseException e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				try {
+					HashMap<String, String> headers = new HashMap<String, String>();
+					
+					if (callback.getMethod().equalsIgnoreCase(POST)) {
+						URLUtil.post(callback.getUrl(), null, headers);
+					} else {
+						URLUtil.get(callback.getUrl(), null, headers);
+					}
+					
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 			}
@@ -116,6 +146,19 @@ public class DSCSession {
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
+				
+				try {
+					HashMap<String, String> headers = new HashMap<String, String>();
+					
+					if (callback.getMethod().equalsIgnoreCase(POST)) {
+						URLUtil.post(callback.getUrl(), null, headers);
+					} else {
+						URLUtil.get(callback.getUrl(), null, headers);
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			
 		});
@@ -127,6 +170,19 @@ public class DSCSession {
 			@Override
 			public void call(ZoneOpenCommand t1) {
 				log.info("ZoneOpen: " + t1.getZone() + " opened.");
+				try {
+					HashMap<String, String> headers = new HashMap<String, String>();
+					
+					if (callback.getMethod().equalsIgnoreCase(POST)) {
+						URLUtil.post(callback.getUrl(), null, headers);
+					} else {
+						URLUtil.get(callback.getUrl(), null, headers);
+					}
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
 			}
 
 		});

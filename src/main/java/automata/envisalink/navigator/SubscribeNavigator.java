@@ -29,8 +29,14 @@ public class SubscribeNavigator extends Restlet {
 				
 				SubscribeRequest jsonRequest = new Gson().fromJson(json.get(), SubscribeRequest.class);
 				
+				if (!jsonRequest.getCallback().getMethod().equalsIgnoreCase("POST") && !jsonRequest.getCallback().getMethod().equalsIgnoreCase("GET")) {
+					RestUtil.handleException(response);
+					return;
+				}
+				
 				DSCSession.getInstance().connect(jsonRequest.getIpAddress());
 				DSCSession.getInstance().subscribe(EventType.ALL, "");
+				DSCSession.getInstance().setCallBackURI(jsonRequest.getCallback());
 				
 				response.setEntity(RestUtil.buildSuccesResponse(), MediaType.APPLICATION_ALL_JSON);
 			}

@@ -3,6 +3,7 @@ package automata.envisalink.navigator;
 public class SubscribeRequest {
 
 	private String ipAddress;
+	private CallBack callback;
 
 	public String getIpAddress() {
 		return ipAddress;
@@ -10,6 +11,14 @@ public class SubscribeRequest {
 
 	public void setIpAddress(String ipAddress) {
 		this.ipAddress = ipAddress;
+	}
+
+	public CallBack getCallback() {
+		return callback;
+	}
+
+	public void setCallback(CallBack callback) {
+		this.callback = callback;
 	}
 
 }
