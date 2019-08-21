@@ -1,6 +1,7 @@
 # Envisalink 4 Rest API
 
-This project is a rest API to interact with the Envisalink DSC using IT100
+This project is a rest API to interact with the Envisalink DSC using IT100.
+
 It uses https://github.com/kmbulebu/dsc-it100-java API to establish connection and talk to the unit. I am merely exposing the API through REST.
 
 This is work in progress for now. I will update the documentation once the direction is clearer.
