@@ -1,7 +1,0 @@
-Hi {reporter},
-
-{comment}
-
-Regards,
-
-{commentor}

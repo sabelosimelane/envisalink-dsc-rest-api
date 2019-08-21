@@ -3,8 +3,6 @@ package automata.envisalink.rest;
 import java.text.ParseException;
 import java.util.Date;
 
-import javax.enterprise.context.ApplicationScoped;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -21,12 +19,23 @@ import automata.envisalink.rest.domain.EventType;
 import rx.Observable;
 import rx.functions.Action1;
 
-@ApplicationScoped
 public class DSCSession {
 	private final static Log log = LogFactory.getLog(DSCSession.class); 
 	
+	private static DSCSession session;
+	
 	private IT100 instance;
 	private Observable<ReadCommand> readObservable;
+	
+	private DSCSession() {}
+	
+	public static DSCSession getInstance() {
+		if (session == null) {
+			session = new DSCSession();
+		}
+		
+		return session;
+	}
 	
 	public void connect(String ipAddress) throws Exception {
 		log.info(String.format("connecting to [%s]...", ipAddress));
@@ -44,19 +53,19 @@ public class DSCSession {
 	
 	public void subscribe(EventType eventType, String callbackURI) {
 		
-		if (eventType == EventType.ZONE_OPEN) {
+		if (eventType.name().equals(EventType.ZONE_OPEN.name())) {
 			subscribeToZoneOpen();
 			
-		} else if (eventType == EventType.ZONE_RESTORE) {
+		} else if (eventType.name().equals(EventType.ZONE_RESTORE.name())) {
 			subscribeToZoneRestore();
 			
-		} else if (eventType == EventType.ZONE_ALARM) {
+		} else if (eventType.name().equals(EventType.ZONE_ALARM.name())) {
 			subscribeToZoneAlarm();
 			
-		} else if (eventType == EventType.ZONE_ALARM_RESTORE) {
+		} else if (eventType.name().equals(EventType.ZONE_ALARM_RESTORE.name())) {
 			subscribeToZoneAlarmRestore();
 			
-		} else if (eventType == EventType.ALL) {
+		} else if (eventType.name().equals(EventType.ALL.name())) {
 			subscribeToZoneOpen();
 			subscribeToZoneRestore();
 			subscribeToZoneAlarm();

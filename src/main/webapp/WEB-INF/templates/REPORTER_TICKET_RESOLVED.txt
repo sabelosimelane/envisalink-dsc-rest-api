@@ -1,9 +1,0 @@
-Hi {reporter},
-
-Please note that your ticket with reference number {ticket.reference}, has been resolved.
-
-If you are not satisfied with the outcome, please respond to this email to reopen the ticket, otherwise if you do not respond within 48 hours the ticket will be closed automatically.
-
-Regards,
-
-Monterrey Body Corporate

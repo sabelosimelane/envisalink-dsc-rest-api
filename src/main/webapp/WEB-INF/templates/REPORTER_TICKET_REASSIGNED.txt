@@ -1,9 +1,0 @@
-Hi {reporter},
-
-Please note that your ticket with reference number {ticket.reference}, has been assigned to {assignee}.
-
-You will receive further communications when the status changes.
-
-Regards,
-
-Monterrey Body Corporate

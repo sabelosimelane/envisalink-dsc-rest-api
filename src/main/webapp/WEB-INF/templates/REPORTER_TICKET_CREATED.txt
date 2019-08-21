@@ -1,9 +1,0 @@
-Hi {reporter},
-
-Please note that your ticket with reference number {ticket.reference}, has been logged successfully.
-
-You will receive notifications when the status changes.
-
-Regards,
-
-Monterrey Body Corporate

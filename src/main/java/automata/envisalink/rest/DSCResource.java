@@ -1,6 +1,5 @@
 package automata.envisalink.rest;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -16,7 +15,7 @@ import automata.envisalink.rest.domain.EventType;
 
 @Path("/module")
 public class DSCResource {
-	private static final Log log = LogFactory.getLog(DSCResource.class);
+	/*private static final Log log = LogFactory.getLog(DSCResource.class);
 	private @Inject DSCSession session;
 	
 	@POST
@@ -57,5 +56,5 @@ public class DSCResource {
 		}
 		
 		return Response.ok().build();
-	}
+	}*/
 }
