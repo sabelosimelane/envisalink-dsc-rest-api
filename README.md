@@ -25,3 +25,9 @@ in the body pass the json object like this:
 if the object above, ipAddress is the ip address of your Envisalink. URL is the Base64 encoded URL that will be called if the Envisalink detects any activity e.g. door opening, alarm going off etc.
 
 In your application you can then react to all the messages you will be receiving from this app.
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+[MIT](https://choosealicense.com/licenses/mit/)
