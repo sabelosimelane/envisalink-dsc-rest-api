@@ -7,6 +7,6 @@ This uses a subscriber pattern which means for instance you'll be able to subscr
 
 Written in Java and it needs to be deployed in a Java container e.g. wildfly, jboss, glassfish etc. after which it can be accessed like:
 
-localhost:8080/envisalink/rest/module/connect/192.168.1.50
+<i>localhost:8080/envisalink/rest/module/connect/192.168.1.50</i>
 
 192.168.1.50 being the ip address of the envisalink or you can use the DNS name "envisalink"
