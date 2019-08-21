@@ -9,7 +9,9 @@ This is work in progress for now. I will update the documentation once the direc
 
 To get started, you simply start the server and it listens to port 8182 (which can be changed). You then make a REST call e.g. 
 
+```java
 http://localhost:8182/v1/envisalink/subscribe
+```
 
 in the body pass the json object like this:
 
