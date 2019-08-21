@@ -8,12 +8,15 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import automata.envisalink.rest.domain.EventType;
 
 
 @Path("/module")
 public class DSCResource {
-
+	private static final Log log = LogFactory.getLog(DSCResource.class);
 	private @Inject DSCSession session;
 	
 	@POST
@@ -33,10 +36,25 @@ public class DSCResource {
 	
 	@POST
 	@Path("/subscribe/{event}/{uri}")
-    @Consumes({ MediaType.APPLICATION_JSON})
 	public Response subscribe(@PathParam("event") String eventType, @PathParam("uri") String uri) {
 		
-		session.subscribe(EventType.fromString(eventType), uri);
+		EventType event = EventType.fromString(eventType);
+		log.info(String.format("subscribing to [%s][%s]", event.name(), uri));
+		session.subscribe(event, uri);
+		
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/disconnect")
+	public Response disconnect() {
+		
+		try {
+			session.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return Response.serverError().build();
+		}
 		
 		return Response.ok().build();
 	}

@@ -1,14 +1,21 @@
 package automata.envisalink.rest;
 
+import java.text.ParseException;
+import java.util.Date;
+
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.concept.utils.DateTimeUtil;
 import com.github.kmbulebu.dsc.it100.ConfigurationBuilder;
 import com.github.kmbulebu.dsc.it100.IT100;
 import com.github.kmbulebu.dsc.it100.commands.read.ReadCommand;
+import com.github.kmbulebu.dsc.it100.commands.read.ZoneAlarmCommand;
+import com.github.kmbulebu.dsc.it100.commands.read.ZoneAlarmRestoreCommand;
 import com.github.kmbulebu.dsc.it100.commands.read.ZoneOpenCommand;
+import com.github.kmbulebu.dsc.it100.commands.read.ZoneRestoredCommand;
 
 import automata.envisalink.rest.domain.EventType;
 import rx.Observable;
@@ -36,13 +43,83 @@ public class DSCSession {
 	}
 	
 	public void subscribe(EventType eventType, String callbackURI) {
+		
+		if (eventType == EventType.ZONE_OPEN) {
+			subscribeToZoneOpen();
+			
+		} else if (eventType == EventType.ZONE_RESTORE) {
+			subscribeToZoneRestore();
+			
+		} else if (eventType == EventType.ZONE_ALARM) {
+			subscribeToZoneAlarm();
+			
+		} else if (eventType == EventType.ZONE_ALARM_RESTORE) {
+			subscribeToZoneAlarmRestore();
+			
+		} else if (eventType == EventType.ALL) {
+			subscribeToZoneOpen();
+			subscribeToZoneRestore();
+			subscribeToZoneAlarm();
+			subscribeToZoneAlarmRestore();
+		}
+	}
+	
+	private void subscribeToZoneAlarmRestore() {
+		readObservable.ofType(ZoneAlarmRestoreCommand.class).subscribe(new Action1<ZoneAlarmRestoreCommand>() {
+
+			@Override
+			public void call(ZoneAlarmRestoreCommand t1) {
+				try {
+					System.out.println("ZoneAlarm: "+DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + t1.getZone() +" - closed.");
+					
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});
+	}
+
+	private void subscribeToZoneAlarm() {
+		readObservable.ofType(ZoneAlarmCommand.class).subscribe(new Action1<ZoneAlarmCommand>() {
+
+			@Override
+			public void call(ZoneAlarmCommand t1) {
+				try {
+					System.out.println("ZoneAlarm: "+DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + t1.getZone() + " closed.");
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});
+	}
+	
+	private void subscribeToZoneRestore() {
+		readObservable.ofType(ZoneRestoredCommand.class).subscribe(new Action1<ZoneRestoredCommand>() {
+
+			@Override
+			public void call(ZoneRestoredCommand t1) {
+				try {
+					System.out.println("ZoneOpen: "+DateTimeUtil.toString(new Date(), DateTimeUtil.yyyy_MM_dd_HH_mm_ss_SSS) + " " + t1.getZone() + " closed.");
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
+	}
+	
+	private void subscribeToZoneOpen() {
 		readObservable.ofType(ZoneOpenCommand.class).subscribe(new Action1<ZoneOpenCommand>() {
 
 			@Override
 			public void call(ZoneOpenCommand t1) {
-				log.info("ZoneOpen: "+ t1.getZone() + " opened.");
+				log.info("ZoneOpen: " + t1.getZone() + " opened.");
 			}
-			
+
 		});
 	}
 	

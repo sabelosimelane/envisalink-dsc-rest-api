@@ -2,7 +2,7 @@ package automata.envisalink.rest.domain;
 
 public enum EventType {
 
-	ZONE_OPEN, ZONE_RESTORE, ZONE_ALARM, ZONE_ALARM_RESTORE, PARTITION_ARMED, PARTITION_DISARMED;
+	ZONE_OPEN, ZONE_RESTORE, ZONE_ALARM, ZONE_ALARM_RESTORE, PARTITION_ARMED, PARTITION_DISARMED, ALL;
 	
 	public static EventType fromString(String eventType) {
 		
@@ -25,8 +25,11 @@ public enum EventType {
 				 
 			case "PARTITION_DISARMED":
 				 return PARTITION_DISARMED;
+				 
+			case "ALL":
+				 return ALL;
 		}
 		
-		return ZONE_OPEN;
+		return ALL;
 	}
 }
