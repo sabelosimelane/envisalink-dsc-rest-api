@@ -1,12 +1,23 @@
 # envisalink-dsc-rest-api
 This project is a rest API to interact with the Envisalink DSC using IT100
 It uses https://github.com/kmbulebu/dsc-it100-java API to establish connection and talk to the unit. I am merely exposing the API through REST.
+
 This is work in progress for now. I will update the documentation once the direction is clearer.
 
-This uses a subscriber pattern which means for instance you'll be able to subscribe to events emitted by your DCS alarm system. You can for an example subscribe to zone open/close, alarm off/on etc.
+To get started, you simply start the server and it listens to port 8182 (which can be changed). You then make a REST call e.g. 
 
-Written in Java and it needs to be deployed in a Java container e.g. wildfly, jboss, glassfish etc. after which it can be accessed like:
+http://localhost:8182/v1/envisalink/subscribe
 
-<i>localhost:8080/envisalink/rest/module/connect/192.168.1.50</i>
+in the body pass the json object like this:
 
-192.168.1.50 being the ip address of the envisalink or you can use the DNS name "envisalink"
+{
+  "ipAddress":"192.168.1.134",
+  "callback": {
+    "url":"aHR0cDovLzE5Mi4xNjguMS43OjgwODAvQXV0b21hdGEvQ29udHJvbGxlcj9uYXY9SGFuZGxlZGV2aWNldHJpZ2dlci5tb2Jp",
+    "method":"POST"
+  	}
+ }
+
+if the object above, ipAddress is the ip address of your Envisalink. URL is the Base64 encoded URL that will be called if the Envisalink detects any activity e.g. door opening, alarm going off etc.
+
+In your application you can then react to all the messages you will be receiving from this app.
