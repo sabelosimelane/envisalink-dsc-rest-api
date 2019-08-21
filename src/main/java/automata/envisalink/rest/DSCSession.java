@@ -3,7 +3,9 @@ package automata.envisalink.rest;
 import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
 
@@ -22,6 +24,7 @@ import com.github.kmbulebu.dsc.it100.commands.read.ReadCommand;
 import automata.envisalink.navigator.domain.AlarmActivity;
 import automata.envisalink.navigator.domain.PartitionActivity;
 import automata.envisalink.navigator.domain.ZoneActivity;
+import automata.envisalink.rest.domain.EventType;
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -35,6 +38,7 @@ public class DSCSession {
 	private IT100 instance;
 	private Observable<ReadCommand> readObservable;
 	private HashMap<String, String> headers = new HashMap<String, String>();
+	private Map<String, AlarmActivity> status = new HashMap<>();	
 	
 	private DSCSession() {
 		headers.put("Content-Type", MediaType.APPLICATION_JSON);
@@ -53,6 +57,15 @@ public class DSCSession {
 		this.callbackURI = callbackURI;
 	}
 
+	public AlarmActivity getLastActivity(String type, int id) {
+		if(type.equals("partition")) {
+			return status.get(PartitionActivity.class.getSimpleName()+ id);
+		} else if(type.equals("zone")) {
+			return status.get(ZoneActivity.class.getSimpleName()+ id);
+		} 
+		return null;
+	}
+	
 	public void connect(String ipAddress) throws Exception {
 		log.info(String.format("connecting to [%s]...", ipAddress));
 		final IT100 it100 = new IT100(new ConfigurationBuilder().withRemoteSocket(ipAddress, 4025).withStatusPolling(15).withEnvisalinkPassword("user").build());
@@ -152,6 +165,7 @@ public class DSCSession {
 				zone.setZone(((BaseZoneCommand)command).getZone());
 				activity = zone;
 				zone.setStatus("Zone Open");
+				status.put(ZoneActivity.class.getSimpleName()+ zone.getZone(), zone);
 				break;
 			
 			case "610": 
@@ -159,6 +173,7 @@ public class DSCSession {
 				zone.setZone(((BaseZoneCommand)command).getZone());
 				activity = zone;
 				zone.setStatus("Zone Restored");
+				status.put(ZoneActivity.class.getSimpleName()+ zone.getZone(), zone);
 				break;
 			
 			case "650": 
@@ -180,6 +195,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Partition Armed");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "653": 
@@ -201,6 +217,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Partition Disarmed");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "656": 

@@ -10,6 +10,8 @@ import org.restlet.Context;
 import org.restlet.Restlet;
 import org.restlet.routing.Router;
 
+import automata.envisalink.navigator.GetPartitionStatusNavigator;
+import automata.envisalink.navigator.GetZoneStatusNavigator;
 import automata.envisalink.navigator.SubscribeNavigator;
 import automata.envisalink.rest.DSCSession;
 
@@ -32,7 +34,8 @@ public class ApplicationWrapper extends Application {
 			router = new Router(getContext());
 
 			router.attach("/v1/envisalink/subscribe", new SubscribeNavigator());
-
+			router.attach("/v1/envisalink/partition/{partitionid}", new GetPartitionStatusNavigator());
+			router.attach("/v1/envisalink/zone/{zoneid}", new GetZoneStatusNavigator());
 
 		} catch (Exception e) {
 			e.printStackTrace();
