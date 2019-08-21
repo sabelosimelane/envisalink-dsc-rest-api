@@ -1,4 +1,4 @@
-<%@page import="za.co.juba.user.domain.User"%>
+<%@page import="com.grs.user.domain.User"%>
 <%@ taglib prefix="concept" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
