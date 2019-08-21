@@ -4,12 +4,15 @@ It uses https://github.com/kmbulebu/dsc-it100-java API to establish connection a
 
 This is work in progress for now. I will update the documentation once the direction is clearer.
 
+## Usage
+
 To get started, you simply start the server and it listens to port 8182 (which can be changed). You then make a REST call e.g. 
 
 http://localhost:8182/v1/envisalink/subscribe
 
 in the body pass the json object like this:
 
+```json
 {
   "ipAddress":"192.168.1.134",
   "callback": {
@@ -17,6 +20,7 @@ in the body pass the json object like this:
     "method":"POST"
   	}
  }
+ ```
 
 if the object above, ipAddress is the ip address of your Envisalink. URL is the Base64 encoded URL that will be called if the Envisalink detects any activity e.g. door opening, alarm going off etc.
 
