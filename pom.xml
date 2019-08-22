@@ -87,23 +87,11 @@
 	
 	
 	</dependencies>
-	<build>
-		<finalName>juba</finalName>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test</testSourceDirectory>
-		<testOutputDirectory>target/test</testOutputDirectory>
-		<outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
-		
-		<testResources>
-			<testResource>
-				<directory>${project.basedir}/src/main/webapp/WEB-INF/classes</directory>
-			</testResource>
-			<testResource>
-				<directory>${project.basedir}/src/test/resources</directory>
-			</testResource>
-		</testResources>		
-				
+	<build>	
+		<sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+		<outputDirectory>${project.basedir}/bin/classes</outputDirectory>
 		<plugins>	
+			
 			<plugin>
 	            <groupId>org.apache.maven.plugins</groupId>
 	            <artifactId>maven-compiler-plugin</artifactId>
@@ -113,8 +101,8 @@
 	                <target>1.8</target>
 	            </configuration>
         	</plugin>
-
-			<plugin>
+        	
+        	<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.8</version>
@@ -126,33 +114,13 @@
 							<goal>copy-dependencies</goal>
 						</goals>
 						<configuration>
-							<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/lib</outputDirectory>
+							<outputDirectory>${project.basedir}/bin/lib</outputDirectory>
 							<includeScope>runtime</includeScope>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-			
-			<plugin>
-		      <artifactId>maven-surefire-plugin</artifactId>
-		      <!-- latest version (2.20.1) does not work well with JUnit5 -->
-		      <version>2.19.1</version>
-		      <dependencies>
-		        <dependency>
-		          <groupId>org.junit.platform</groupId>
-		          <artifactId>junit-platform-surefire-provider</artifactId>
-		          <version>1.0.3</version>
-		        </dependency>
-		        <dependency>
-		          <groupId>org.junit.jupiter</groupId>
-		          <artifactId>junit-jupiter-engine</artifactId>
-		          <version>5.0.3</version>
-		        </dependency>
-		      </dependencies>
-		    </plugin>
-			
-		</plugins>
-
-	</build>  
+       </plugins>
+     </build>  
   
 </project>

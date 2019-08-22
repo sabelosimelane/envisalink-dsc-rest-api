@@ -181,6 +181,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Partition Ready");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "651": 
@@ -188,6 +189,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Partition Not Ready");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "652": 
@@ -203,6 +205,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Partition Ready - Force Arming Enabled");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "654": 
@@ -210,6 +213,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Partition In Alarm");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "655": 
@@ -260,6 +264,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Failure to Arm");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "700": 
@@ -267,6 +272,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("User Closing");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "701": 
@@ -274,6 +280,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Special Closing");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "702": 
@@ -281,6 +288,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Partial Closing");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "750": 
@@ -288,6 +296,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("User Opening");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 			
 			case "751": 
@@ -295,6 +304,7 @@ public class DSCSession {
 				partition.setPartition(((BasePartitionCommand)command).getPartition());
 				activity = partition;
 				partition.setStatus("Special Opening");
+				status.put(PartitionActivity.class.getSimpleName()+ partition.getPartition(), partition);
 				break;
 		
 		}
