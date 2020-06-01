@@ -12,7 +12,7 @@ To get started, you simply start the server and it listens to port 8182 (which c
 
 You then make a REST call e.g. 
 
-```java http://localhost:8182/v1/envisalink/subscribe```
+```http://localhost:8182/v1/envisalink/subscribe```
 
 in the body pass the json object like this:
 
