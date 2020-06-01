@@ -8,11 +8,11 @@ This is work in progress for now. I will update the documentation once the direc
 
 ## Usage
 
-To get started, you simply start the server and it listens to port 8182 (which can be changed). The server does not need a Java container, but rather uses restlet as a servlet engine. It has a main java ```class com.concept.restlet.server.RestServer``` that you need to run using ```java -cp "."  com.concept.restlet.server.RestServer``` You then make a REST call e.g. 
+To get started, you simply start the server and it listens to port 8182 (which can be changed). The server does not need a Java container, but rather uses restlet as a servlet engine. It has a main java ```class com.concept.restlet.server.RestServer``` that you need to run using ```java -cp "." com.concept.restlet.server.RestServer``` 
 
-```java
-http://localhost:8182/v1/envisalink/subscribe
-```
+You then make a REST call e.g. 
+
+```java http://localhost:8182/v1/envisalink/subscribe```
 
 in the body pass the json object like this:
 
