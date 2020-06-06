@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.ws.rs.core.MediaType;
 
@@ -20,11 +19,12 @@ import com.github.kmbulebu.dsc.it100.IT100;
 import com.github.kmbulebu.dsc.it100.commands.read.BasePartitionCommand;
 import com.github.kmbulebu.dsc.it100.commands.read.BaseZoneCommand;
 import com.github.kmbulebu.dsc.it100.commands.read.ReadCommand;
+import com.github.kmbulebu.dsc.it100.commands.write.PartitionArmWithCodeCommand;
+import com.github.kmbulebu.dsc.it100.commands.write.PartitionDisarmCommand;
 
 import automata.envisalink.navigator.domain.AlarmActivity;
 import automata.envisalink.navigator.domain.PartitionActivity;
 import automata.envisalink.navigator.domain.ZoneActivity;
-import automata.envisalink.rest.domain.EventType;
 import rx.Observable;
 import rx.functions.Action1;
 
@@ -77,6 +77,16 @@ public class DSCSession {
 		readObservable = it100.getReadObservable();
 	}
 
+	public void armAlarm(int partition, String code) {
+		PartitionArmWithCodeCommand command = new PartitionArmWithCodeCommand(partition, code);
+		instance.send(command);
+	}
+	
+	public void disArmAlarm(int partition, String code) {
+		PartitionDisarmCommand command = new PartitionDisarmCommand(partition, code);
+		instance.send(command);
+	}
+	
 	public void subscribeToAll() {
 
 		readObservable.subscribe(new Action1<ReadCommand>() {
