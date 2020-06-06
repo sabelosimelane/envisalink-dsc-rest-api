@@ -41,6 +41,8 @@ public class ApplicationWrapper extends Application {
 			router.attach("/v1/envisalink/arm", new ArmAlarmNavigator());
 			router.attach("/v1/envisalink/disarm", new DisArmAlarmNavigator());
 
+			System.out.println("envisalink routes done!!");
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
