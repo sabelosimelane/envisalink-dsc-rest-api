@@ -80,11 +80,13 @@ public class DSCSession {
 	public void armAlarm(int partition, String code) {
 		PartitionArmWithCodeCommand command = new PartitionArmWithCodeCommand(partition, code);
 		instance.send(command);
+		log.info("alarm successfull armed.");
 	}
 	
 	public void disArmAlarm(int partition, String code) {
 		PartitionDisarmCommand command = new PartitionDisarmCommand(partition, code);
 		instance.send(command);
+		log.info("alarm successfull disarmed.");
 	}
 	
 	public void subscribeToAll() {
